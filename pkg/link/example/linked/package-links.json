@@ -1,0 +1,6 @@
+{
+  "linkDependencies": {
+    "common-path-start": "../original/node_modules/common-path-start",
+    "@unixcompat/cp.js": "../original/node_modules/@unixcompat/cp.js"
+  }
+}

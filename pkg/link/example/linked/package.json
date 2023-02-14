@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "scripts": {
+    "prepare": "dep-link ln"
+  },
+  "dependencies": {
+    "build-number-generator": "2.0.4"
+  },
+  "devDependencies": {
+    "@pkgdep/link": "file:../.."
+  }
+}

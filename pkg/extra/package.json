@@ -1,0 +1,85 @@
+{
+  "name": "@pkgdep/extra",
+  "description": "Installs extra configured NPM packages without saving them as dependencies to package.json.",
+  "version": "1.0.0",
+  "homepage": "https://github.com/prantlf/dep-dev/tree/master/pkg/extra#readme",
+  "author": {
+    "name": "Ferdinand Prantl",
+    "email": "prantlf@gmail.com",
+    "url": "http://prantl.tk"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prantlf/dep-dev.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prantlf/dep-dev/issues"
+  },
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/prantlf/dep-dev/blob/master/pkg/extra/LICENSE"
+    }
+  ],
+  "engines": {
+    "node": ">=16.14"
+  },
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "require": "./dist/index.cjs",
+    "import": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
+  "bin": {
+    "dep-extra": "bin/dep-extra.js"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "prepare": "rollup -c && cp.js src/index.d.ts dist && cp.js ../../LICENSE .",
+    "lint": "tsc --noEmit --lib ES2015 test/types.test.ts",
+    "check": "node test/cjs.test.cjs && ./test/test.sh",
+    "test": "tsc --noEmit --lib ES2015 test/types.test.ts && node test/cjs.test.cjs && ./test/test.sh"
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      [
+        "@semantic-release/github",
+        {
+          "failComment": false
+        }
+      ],
+      "@semantic-release/git"
+    ]
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "6.0.2",
+    "@semantic-release/git": "10.0.1",
+    "@pkgdep/extra": "link:"
+  },
+  "keywords": [
+    "npm",
+    "install",
+    "uninstall",
+    "add",
+    "remove",
+    "dependencies",
+    "extra",
+    "extraneous",
+    "extra-dependencies",
+    "extraneous-dependencies",
+    "link",
+    "unlink",
+    "symlink"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "prepare": "dep-extra i"
+  },
+  "dependencies": {
+    "build-number-generator": "2.0.4"
+  },
+  "devDependencies": {
+    "@pkgdep/extra": "file:.."
+  },
+  "extraDependencies": {
+    "common-path-start": "0.0.4"
+  }
+}

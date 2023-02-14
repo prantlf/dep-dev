@@ -1,0 +1,12 @@
+.DS_Store
+dist
+node_modules
+/example/.gitignore
+/example/package-links.json
+/example/package-lock.json
+/example/package.json
+/pkg/extra/LICENSE
+/pkg/link/LICENSE
+/pkg/update/LICENSE
+/pkg/update/example/package.json
+/pkg/update/example/package-lock.json

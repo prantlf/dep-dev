@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "dependencies": {
+    "@unixcompat/cp.js": "2.0.0",
+    "common-path-start": "0.0.4"
+  }
+}
