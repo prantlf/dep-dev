@@ -1,3 +1,3 @@
-## 1.0.0 (20233-02-14)
+# @pkgdep/update-v1.0.0 (2023-02-14)
 
 Initial release.
