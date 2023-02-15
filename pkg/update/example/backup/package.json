@@ -4,6 +4,8 @@
     "prepare": "dep-update up"
   },
   "dependencies": {
+    "@unixcompat/cat.js": "~1.0.0",
+    "@unixcompat/mkdir.js": "^1.0.0",
     "build-number-generator": "~2.0.0",
     "common-path-start": "0.0.3"
   },
@@ -11,6 +13,7 @@
     "@pkgdep/update": "file:.."
   },
   "updateDependencies": [
+    "@unixcompat/*",
     "build-number-generator"
   ]
 }

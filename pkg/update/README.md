@@ -58,7 +58,7 @@ If you need to update some NPM packages, which ar elocked by `package-lock.json`
 If you need to continue updating more NPM packages, repeated re-installations will make your work inefficient. You can enable automatic update of thesome NPM packages:
 
     npx @pkgdep/update s
-    npx @pkgdep/update up some-package
+    npx dep-update up some-package
 
 And the installation of both managed and updated NPM packages will become simpler:
 
@@ -84,6 +84,10 @@ The contents of `package.json` will be extended with a preparation script, a dev
 If you want to store the extra dependencies outside of `package.json`, you can request the file name `package-updates.json`, which will be tried by default before `package.json`:
 
     npx @pkgdep/update s -c package-updates.json
+
+If you want to update multipel NPM dependencies by wildcard patterns, you can use [BASH patterns]. For example, the following pattern will match `@unixcompat/cat.js`, `@unixcompat/cp.js`, `@unixcompat/mkdir.js` and `@unixcompat/rm.js`:
+
+    npx dep-update up "@unixcompat/*"
 
 If you want to automate linking of NPM packages, you can engage [`@pkgdep/link`] too. See the [example on the project page].
 
@@ -133,3 +137,4 @@ Licensed under the MIT license.
 [Yarn]: https://yarnpkg.com/
 [`@pkgdep/link`]: https://www.npmjs.com/package/@pkgdep/link
 [example on the project page]: ../../README.md#extra-and-link
+[BASH patterns]: https://www.linuxjournal.com/content/pattern-matching-bash

@@ -1,4 +1,5 @@
 import { join } from 'path'
+import picomatch from 'picomatch'
 import listDeps from '../../../src/list-deps.js'
 import readJSON from '../../../src/read-json.js'
 import spawnProcess from '../../../src/spawn-process.js'
@@ -16,11 +17,28 @@ export async function downgradeDependencies(depNames, { config, cwd, save, lineB
   // append the version specifiers
   const root = await findRoot(cwd)
   const { packages } = await readJSON(join(root, 'package-lock.json'))
-  const deps = depNames.map(dep => {
-    const pkg = packages[`node_modules/${dep}`]
-    if (!pkg) throw new Error(`unknown dependency: "${dep}`)
-    return `${dep}@${pkg.version}`
-  })
+  const deps = depNames.reduce((result, pattern) => {
+    if (pattern.includes('*') || pattern.includes('*')) {
+      const match = picomatch(pattern)
+      let updated
+      for (const key in packages) {
+        if (key.startsWith('node_modules/')) {
+          const name = key.substring(13)
+          if (match(name)) {
+            const pkg = packages[key]
+            result.push(`${name}@${pkg.version}`)
+            updated = true
+          }
+        }
+      }
+      if (!updated) throw new Error(`no dependency matched ${pattern}`)
+    } else {
+      const pkg = packages[`node_modules/${pattern}`]
+      if (!pkg) throw new Error(`unknown dependency: "${pattern}`)
+      result.push(`${pattern}@${pkg.version}`)
+    }
+    return result
+  }, [])
 
   // collect all arguments for the npm execution
   const args = ['i', '--no-save', '--no-package-lock', '--no-audit', '--no-update-notifier']

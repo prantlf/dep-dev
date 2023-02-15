@@ -37,6 +37,8 @@ if [ "$?" != "0" ]; then exit 1; fi
 echo ">>> checking output"
 check_dir "build-number-generator"
 check_dir "common-path-start"
+check_ver "@unixcompat/cat.js" "1.0.1"
+check_ver "@unixcompat/mkdir.js" "1.1.2"
 check_ver "build-number-generator" "2.0.4"
 check_ver "common-path-start" "0.0.3"
 

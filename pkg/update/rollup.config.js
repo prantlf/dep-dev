@@ -1,3 +1,3 @@
 import build from '../../src/build.js'
 
-export default build()
+export default build({ external: ['picomatch'] })

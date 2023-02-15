@@ -63,9 +63,9 @@
     ]
   },
   "devDependencies": {
+    "@pkgdep/update": "link:",
     "@semantic-release/changelog": "6.0.2",
-    "@semantic-release/git": "10.0.1",
-    "@pkgdep/update": "link:"
+    "@semantic-release/git": "10.0.1"
   },
   "keywords": [
     "npm",
@@ -74,5 +74,8 @@
     "dependencies",
     "update-dependencies",
     "upgrade-dependencies"
-  ]
+  ],
+  "dependencies": {
+    "picomatch": "2.3.1"
+  }
 }

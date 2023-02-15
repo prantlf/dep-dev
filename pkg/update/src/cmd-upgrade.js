@@ -1,4 +1,5 @@
 import { join, resolve } from 'path'
+import picomatch from 'picomatch'
 import readJSON from '../../../src/read-json.js'
 import findRoot from '../../../src/find-root.js'
 import loadConfig from '../../../src/load-config.js'
@@ -31,15 +32,26 @@ export async function upgradeDependencies(newDeps, { config, cwd, save, lineBrea
     return console.log('no dependencies to update')
   }
 
-  // append the version specifiers
-  // if (!root) root = await findRoot(cwd)
-  // const { dependencies = {}, devDependencies = {} } = await readJSON(join(root, 'package.json'))
-  // Object.assign(dependencies, devDependencies)
-  // deps = deps.map(dep => {
-  //   const version = dependencies[dep]
-  //   if (!version) throw new Error(`unknown dependency: "${dep}`)
-  //   return `${dep}@${version}`
-  // })
+  // resolve wildcards
+  if (!root) root = await findRoot(cwd)
+  const { dependencies = {}, devDependencies = {} } = await readJSON(join(root, 'package.json'))
+  Object.assign(dependencies, devDependencies)
+  deps = deps.reduce((result, pattern) => {
+    if (pattern.includes('*') || pattern.includes('*')) {
+      const match = picomatch(pattern)
+      let updated
+      for (const dep in dependencies) {
+        if (match(dep)) {
+          result.push(dep)
+          updated = true
+        }
+      }
+      if (!updated) throw new Error(`no dependency matched ${pattern}`)
+    } else {
+      result.push(pattern)
+    }
+    return result
+  }, [])
 
   // collect all arguments for the npm execution
   const args = ['up', '--no-save', '--no-package-lock', '--no-audit', '--no-update-notifier']
@@ -63,7 +75,6 @@ export async function upgradeDependencies(newDeps, { config, cwd, save, lineBrea
   await spawnProcess('npm', args, { cwd })
 
   // get and print the versions of the updated deps
-  if (!root) root = await findRoot(cwd)
   deps = await resolveDeps(deps, root)
   if (list) listDeps(deps)
 
