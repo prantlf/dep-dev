@@ -71,20 +71,32 @@ for (let i = 2, l = argv.length; i < l; ++i) {
         case 'e': case 'deep':
           deep = flag
           return
+        case 'E':
+          deep = !flag
+          return
         case 's': case 'save':
           save = flag
           return
+        case 'S':
+          save = !flag
+          return
         case 'b': case 'line-break':
           lineBreak = flag
+          return
+        case 'B':
+          lineBreak = !flag
           return
         case 'p': case 'progress':
           progress = flag
           return
         case 'P':
-          progress = false
+          progress = !flag
           return
         case 'l': case 'list':
           list = flag
+          return
+        case 'L':
+          list = !flag
           return
         case 'v': case 'verbose':
           verbose = flag
