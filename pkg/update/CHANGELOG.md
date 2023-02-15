@@ -1,3 +1,10 @@
+# [@pkgdep/update-v1.3.0](https://github.com/prantlf/dep-dev/compare/@pkgdep/update-v1.2.0...@pkgdep/update-v1.3.0) (2023-02-15)
+
+
+### Features
+
+* Support upper-case letters as negative command-line flags ([51b6a87](https://github.com/prantlf/dep-dev/commit/51b6a87b1940b0fc38de0a22a90558c2ed858c66))
+
 # [@pkgdep/update-v1.2.0](https://github.com/prantlf/dep-dev/compare/@pkgdep/update-v1.1.0...@pkgdep/update-v1.2.0) (2023-02-15)
 
 
