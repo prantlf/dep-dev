@@ -1,7 +1,7 @@
 {
   "name": "@pkgdep/link",
   "description": "Links local NPM packages automatically according to a configuration.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "homepage": "https://github.com/prantlf/dep-dev/tree/master/pkg/link#readme",
   "author": {
     "name": "Ferdinand Prantl",
