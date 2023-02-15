@@ -7,8 +7,22 @@ import listDeps from '../../../src/list-deps.js'
 import spawnProcess from '../../../src/spawn-process.js'
 import resolveDeps from '../../../src/resolve-deps.js'
 import upgradeDeps from './upgrade-deps.js'
+import isPattern from './is-pattern.js'
 
-export async function upgradeDependencies(newDeps, { config, cwd, save, lineBreak, progress, list, verbose, dryRun } = {}) {
+async function deepDeps(root, pending, visited = new Set()) {
+  await Promise.all(pending.map(async dep => {
+    const pkg = `${root}/node_modules/${dep}/package.json`
+    let { peerDependencies = {} } = await readJSON(pkg)
+    peerDependencies = Object.keys(peerDependencies)
+    if (peerDependencies.length) {
+      for (const dep of peerDependencies) visited.add(dep)
+      await deepDeps(root, peerDependencies, visited)
+    }
+  }))
+  return visited
+}
+
+export async function upgradeDependencies(newDeps, { config, cwd, deep, save, lineBreak, progress, list, verbose, dryRun } = {}) {
   const start = performance.now()
 
   // if no deps were specified, install all deps from the config file
@@ -32,15 +46,19 @@ export async function upgradeDependencies(newDeps, { config, cwd, save, lineBrea
     return console.log('no dependencies to update')
   }
 
-  // resolve wildcards
+  // traverse peer dependencies
   if (!root) root = await findRoot(cwd)
-  const { dependencies = {}, devDependencies = {} } = await readJSON(join(root, 'package.json'))
-  Object.assign(dependencies, devDependencies)
+  let { dependencies = {}, devDependencies = {} } = await readJSON(join(root, 'package.json'))
+  dependencies = Object.keys(dependencies)
+  const peers = deep && deps.some(isPattern) ? await deepDeps(root, dependencies) : []
+  dependencies = new Set([...dependencies, ...peers, ...Object.keys(devDependencies)])
+
+  // resolve wildcards
   deps = deps.reduce((result, pattern) => {
-    if (pattern.includes('*') || pattern.includes('*')) {
+    if (isPattern(pattern)) {
       const match = picomatch(pattern)
       let updated
-      for (const dep in dependencies) {
+      for (const dep of dependencies) {
         if (match(dep)) {
           result.push(dep)
           updated = true

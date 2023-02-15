@@ -104,6 +104,7 @@ If you want to automate linking of NPM packages, you can engage [`@pkgdep/link`]
     Options:
       -c|--config <file>    configuration file with the dependencies
       -d|--directory <dir>  directory in which to run the npm commands   (.)
+      -e|--[no-]deep        traverse direct and peer dependencies        (false)
       -s|--[no-]save        save the arguments to the configuration file (true)
       -b|--[no-]line-break  end the configuration file with a line break (true)
       -p|--[no-]progress    enable progress output for the npm commands  (true)

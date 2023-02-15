@@ -5,6 +5,7 @@ import readJSON from '../../../src/read-json.js'
 import spawnProcess from '../../../src/spawn-process.js'
 import findRoot from '../../../src/find-root.js'
 import downgradeDeps from './downgrade-deps.js'
+import isPattern from './is-pattern.js'
 
 export async function downgradeDependencies(depNames, { config, cwd, save, lineBreak, progress, list, verbose, dryRun } = {}) {
   const start = performance.now()
@@ -18,7 +19,7 @@ export async function downgradeDependencies(depNames, { config, cwd, save, lineB
   const root = await findRoot(cwd)
   const { packages } = await readJSON(join(root, 'package-lock.json'))
   const deps = depNames.reduce((result, pattern) => {
-    if (pattern.includes('*') || pattern.includes('*')) {
+    if (isPattern(pattern)) {
       const match = picomatch(pattern)
       let updated
       for (const key in packages) {

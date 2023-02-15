@@ -13,6 +13,7 @@ test('Type declarations for TypeScript', async () => {
   await upgradeDependencies(null, { config: 'test' })
   await upgradeDependencies(null, { config: false })
   await upgradeDependencies(null, { cwd: 'test' })
+  await upgradeDependencies(null, { deep: true })
   await upgradeDependencies(null, { save: false })
   await upgradeDependencies(null, { lineBreak: false })
   await upgradeDependencies(null, { progress: false })

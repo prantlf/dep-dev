@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "prepare": "dep-update up"
+    "prepare": "dep-update up -e"
   },
   "dependencies": {
     "@unixcompat/cat.js": "~1.0.0",

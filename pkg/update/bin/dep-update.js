@@ -26,6 +26,7 @@ Commands:
 Options:
   -c|--config <file>    configuration file with the dependencies
   -d|--directory <dir>  directory in which to run the npm commands   (.)
+  -e|--[no-]deep        traverse peer dependencies                  (false)
   -s|--[no-]save        save the arguments to the configuration file (true)
   -b|--[no-]line-break  end the configuration file with a line break (true)
   -p|--[no-]progress    enable progress output for the npm commands  (true)
@@ -47,7 +48,7 @@ $ dep-update up -d test -v`)
 // options
 const { argv } = process
 const args = []
-let   config, cwd, save, lineBreak, progress, list, verbose, dryRun
+let   config, cwd, deep, save, lineBreak, progress, list, verbose, dryRun
 
 function fail(message) {
   console.error(message)
@@ -66,6 +67,9 @@ for (let i = 2, l = argv.length; i < l; ++i) {
           return
         case 'd': case 'directory':
           cwd = match[4] || argv[++i]
+          return
+        case 'e': case 'deep':
+          deep = flag
           return
         case 's': case 'save':
           save = flag
@@ -124,7 +128,7 @@ const [command, ...deps] = args
 try {
   if (command === 'update' || command === 'upgrade' || command === 'up') {
     await upgradeDependencies(deps, {
-      config, cwd, save, lineBreak, progress, list, verbose, dryRun
+      config, cwd, deep, save, lineBreak, progress, list, verbose, dryRun
     })
   } else if (command === 'downgrade' || command === 'down') {
     if (!deps.length) fail('packages to downgrade missing')
