@@ -48,6 +48,9 @@ importers:
       '@pkgdep/update': 'link:'
       '@semantic-release/changelog': 6.0.2
       '@semantic-release/git': 10.0.1
+      picomatch: 2.3.1
+    dependencies:
+      picomatch: 2.3.1
     devDependencies:
       '@pkgdep/update': 'link:'
       '@semantic-release/changelog': 6.0.2
@@ -1872,7 +1875,6 @@ packages:
   /picomatch/2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
-    dev: true
 
   /pify/3.0.0:
     resolution: {integrity: sha512-C3FsVNH1udSEX48gGX1xfvwTWfsYWj5U+8/uK15BGzIGrKoUpghX8hWZwa/OFnakBiiVNmBvemTJR5mcy7iPcg==}
