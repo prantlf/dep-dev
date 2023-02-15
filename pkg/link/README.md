@@ -64,7 +64,7 @@ If you need to link local NPM packages, you have to do it after installing the m
 If you need to link more local NPM packages, repeated re-installations will make your work inefficient. You can enable automatic linking to the local NPM packages after the dependencies are installed:
 
     npx @pkgdep/link s
-    npx @pkgdep/link ln other-package
+    npx dep-link ln other-package
 
 And the installation of the remote NPM packages and linking to the local ones will become simpler:
 
@@ -102,9 +102,9 @@ package-links.json
 If you want to automate linking of NPM packages, you can engage [`@pkgdep/extra`] too:
 
     npx @pkgdep/link s -c package-extras.json
-    npx @pkgdep/extra i some-package
+    npx dep-extra i some-package
     npx @pkgdep/link s
-    npx @pkgdep/link ln ../other-package
+    npx dep-link ln ../other-package
 
 And the resulting contents of `package.json`:
 

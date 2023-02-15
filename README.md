@@ -37,8 +37,8 @@ Automate installing of extra NPM packages and linking of local NPM packages:
 
 Add extra NPM packages to be installed and local NPM packages to be linked:
 
-    npx @pkgdep/extra i some-package
-    npx @pkgdep/link ln ../other-package
+    npx dep-extra i some-package
+    npx dep-link ln ../other-package
 
 Install the project dependencies including the extra and linked NPM packages:
 
@@ -86,8 +86,8 @@ Automate updating of selectedNPM packages and linking of local NPM packages:
 
 Add selected NPM packages to be updated and local NPM packages to be linked:
 
-    npx @pkgdep/update up some-package
-    npx @pkgdep/link ln ../other-package
+    npx dep-update up some-package
+    npx dep-link ln ../other-package
 
 Install the project dependencies including the updated and linked NPM packages:
 

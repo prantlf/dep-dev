@@ -57,7 +57,7 @@ If you need to install extra NPM packages, which aren't managed by `package.json
 If you need to keep more extra NPM packages installed, repeated re-installations will make your work inefficient. You can enable automatic installation of the extra NPM packages together with the managed ones:
 
     npx @pkgdep/extra s
-    npx @pkgdep/extra i some-package
+    npx dep-extra i some-package
 
 And the installation of both managed and extra NPM packages will become simpler:
 
