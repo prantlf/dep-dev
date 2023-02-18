@@ -2,6 +2,8 @@
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
+VERBOSE=--verbose
+export NODE_OPTIONS="--enable-source-maps $NODE_OPTIONS"
 
 check_dir() {
   dir=$1
@@ -36,7 +38,7 @@ cd "$SCRIPTPATH/../example/original"
 if [ "$?" != "0" ]; then exit 1; fi
 
 echo ">>> installing dependencies"
-npm ci --no-audit --no-update-notifier
+npm ci --no-audit --no-update-notifier $VERBOSE
 if [ "$?" != "0" ]; then exit 1; fi
 
 echo ">>> checking output"
@@ -48,7 +50,7 @@ cd "$SCRIPTPATH/../example/linked"
 if [ "$?" != "0" ]; then exit 1; fi
 
 echo ">>> installing dependencies"
-npm ci --no-audit --no-update-notifier
+npm ci --no-audit --no-update-notifier $VERBOSE
 if [ "$?" != "0" ]; then exit 1; fi
 
 echo ">>> checking output"

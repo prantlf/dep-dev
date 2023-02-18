@@ -2,9 +2,9 @@ import resolveConfig from '../../../src/resolve-config.js'
 import writeJSON from '../../../src/write-json.js'
 
 // Adds the specified dependencies to the list for upgrading.
-export default async function upgradeDeps(deps, config, root, lineBreak) {
+export default async function upgradeDeps(deps, config, root, lineBreak, verbose) {
   let pkg
-  ({ config, pkg } = await resolveConfig('updates', config, root))
+  ({ config, pkg } = await resolveConfig('updates', config, root, undefined, undefined, verbose))
 
   let { updateDependencies } = pkg
   if (!updateDependencies) updateDependencies = []
@@ -12,5 +12,5 @@ export default async function upgradeDeps(deps, config, root, lineBreak) {
   const newDeps = deps.filter(dep => !updateDependencies.includes(dep))
   pkg.updateDependencies = updateDependencies.push(...newDeps)
 
-  await writeJSON(config, pkg, lineBreak)
+  await writeJSON(config, pkg, lineBreak, verbose)
 }

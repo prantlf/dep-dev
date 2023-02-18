@@ -16,13 +16,13 @@ export default async function installTool(name, root, list, progress, verbose, d
     const duration = Math.trunc(performance.now() - start)
     console.log(`\nadded 1 package in ${duration}ms`)
     if (list !== false) {
-      const { version } = await readPkg()
+      const { version } = await readPkg(verbose)
       listDeps({ [name]: version })
     }
   } else {
     await spawnProcess('npm', args, { cwd })
     if (list !== false) {
-      const { [name]: version } = await resolveDeps([name], root)
+      const { [name]: version } = await resolveDeps([name], root, verbose)
       listDeps({ [name]: version })
     }
   }

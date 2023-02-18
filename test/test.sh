@@ -2,6 +2,8 @@
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
+VERBOSE=--verbose
+export NODE_OPTIONS="--enable-source-maps $NODE_OPTIONS"
 
 check_dir() {
   dir=$1
@@ -58,25 +60,25 @@ check_dir "build-number-generator"
 check_dir "common-path-start"
 
 echo ">>> initialising extras"
-./node_modules/.bin/dep-extra s -c package-extras.json -v
+./node_modules/.bin/dep-extra s $VERBOSE -c package-extras.json
 if [ "$?" != "0" ]; then exit 1; fi
 
 echo ">>> checking output"
 check_file "../package-extras.json"
 
 echo ">>> initialising links"
-./node_modules/.bin/dep-link s
+./node_modules/.bin/dep-link s $VERBOSE
 if [ "$?" != "0" ]; then exit 1; fi
 
 echo ">>> checking output"
 check_file "../package-links.json"
 
 echo ">>> adding extras"
-./node_modules/.bin/dep-extra i common-path-start
+./node_modules/.bin/dep-extra i $VERBOSE common-path-start 
 if [ "$?" != "0" ]; then exit 1; fi
 
 echo ">>> adding links"
-./node_modules/.bin/dep-link ln \
+./node_modules/.bin/dep-link ln $VERBOSE\
   ../pkg/link/example/original/node_modules/common-path-start \
   ../pkg/link/example/original/node_modules/@unixcompat/cp.js
 if [ "$?" != "0" ]; then exit 1; fi
@@ -88,7 +90,7 @@ check_link "@unixcompat/cp.js"
 check_link ".bin/cp.js"
 
 echo ">>> installing dependencies again"
-npm ci --no-audit --no-update-notifier
+npm ci --no-audit --no-update-notifier $VERBOSE
 if [ "$?" != "0" ]; then exit 1; fi
 
 echo ">>> checking output again"

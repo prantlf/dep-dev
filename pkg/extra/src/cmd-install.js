@@ -6,31 +6,37 @@ import listDeps from '../../../src/list-deps.js'
 import spawnProcess from '../../../src/spawn-process.js'
 import resolveDeps from '../../../src/resolve-deps.js'
 import addDeps from './add-deps.js'
+import log from './log.js'
 
 // Enables installing the extra specified dependencies and performs
 // the installation right away.
 export async function installExtraDependencies(newDeps, { config, cwd, save, lineBreak, progress, list, verbose, dryRun } = {}) {
   const start = performance.now()
+  if (verbose === undefined) verbose = process.env.npm_config_loglevel === 'verbose'
 
   // if no deps were specified, install all deps from the config file
   let deps = newDeps, root
   if (!(deps && deps.length)) {
     if (config) {
       if (config === true) {
-        root = await findRoot(cwd)
+        root = await findRoot(cwd, verbose)
         config = join(root, 'package-extras.json')
       } else {
         config = resolve(config)
       }
-      deps = await readJSON(config)
+      deps = await readJSON(config, verbose)
     } else {
-      root = await findRoot(cwd)
-      deps = await loadConfig('extras', root)
+      root = await findRoot(cwd, verbose)
+      deps = await loadConfig('extras', root, verbose)
     }
     deps = deps.extraDependencies
   }
-  if (deps && !Array.isArray(deps)) {
-    deps = Object.keys(deps).map(name => `${name}@${deps[name]}`)
+  if (deps) {
+    if (!Array.isArray(deps)) {
+      deps = Object.keys(deps).map(name => `${name}@${deps[name]}`)
+    } else if (verbose) {
+      log(`installing dependencies: ${deps.join(', ')}`)
+    }
   }
   if (!(deps && deps.length)) {
     return console.log('no extra dependencies to install')
@@ -40,7 +46,6 @@ export async function installExtraDependencies(newDeps, { config, cwd, save, lin
   const args = ['i', '--no-save', '--no-package-lock', '--no-audit', '--no-update-notifier']
   if (progress === undefined) progress = !('npm_config_progress' in process.env)
   if (!progress) args.push('--no-progress')
-  if (verbose === undefined) verbose = process.env.npm_config_loglevel === 'verbose'
   if (verbose) args.push('--verbose')
   args.push(...deps);
 
@@ -59,12 +64,12 @@ export async function installExtraDependencies(newDeps, { config, cwd, save, lin
   await spawnProcess('npm', args, { cwd })
 
   // get and print the versions of the installed extra deps
-  if (!root) root = await findRoot(cwd)
-  deps = await resolveDeps(deps, root)
+  if (!root) root = await findRoot(cwd, verbose)
+  deps = await resolveDeps(deps, root, verbose)
   if (list) listDeps(deps)
 
   // save the newly added deps to the config file
   if (save !== false && newDeps && newDeps.length) {
-    await addDeps(newDeps, deps, config, root, lineBreak)
+    await addDeps(newDeps, deps, config, root, lineBreak, verbose)
   }
 }

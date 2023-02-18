@@ -1,43 +1,37 @@
 import { lstat, realpath, rm, unlink } from 'fs/promises'
-import { join, relative } from 'path'
+import { join } from 'path'
+import { shorten } from '../../../src/log.js'
 import readJSON from '../../../src/read-json.js'
-
-// Logs a message with the prefix of this package.
-function log(message) {
-  console.log('dep-link', message)
-}
+import log from './log.js'
 
 // Removes a link to a dependency directory and all bin scripts from that
 // dependency that were installed to node_modules/.bin.
 async function destroyLink(name, root, verbose) {
-  const cwd = process.cwd()
-  const short = path => relative(cwd, path)
-
   const link = join(root, 'node_modules', name)
-  if (verbose) log(`checking existence of ${short(link)}`)
+  if (verbose) log(`checking existence of ${shorten(link)}`)
   let prev, real
   try {
     prev = await lstat(link)
     if (prev.isSymbolicLink()) {
-      if (verbose) log(`symlink ${short(link)} exists`)
+      if (verbose) log(`symlink ${shorten(link)} exists`)
 			real = await realpath(link);
-      if (verbose) log(`symlink ${short(link)} points to ${real}`)
+      if (verbose) log(`symlink ${shorten(link)} points to ${real}`)
 		} else {
-      throw new Error(`${short(link)} is not a link`)
+      throw new Error(`${shorten(link)} is not a link`)
     }
   } catch (err) {
     if (err.code !== 'ENOENT') throw err
     if (verbose) {
-      if (prev) log(`symlink ${short(link)} is invalid`)
-      else log(`file ${short(link)} does not exist`)
+      if (prev) log(`symlink ${shorten(link)} is invalid`)
+      else log(`file ${shorten(link)} does not exist`)
     }
   }
 
   if (!prev) return
   if (!real) return remove()
 
-  if (verbose) log(`reading package.json from ${short(link)}`)
-  const pkg = await readJSON(join(link, 'package.json'))
+  if (verbose) log(`reading package.json from ${shorten(link)}`)
+  const pkg = await readJSON(join(link, 'package.json'), verbose)
   const { bin } = pkg
   if (bin) {
     if (typeof bin === 'string') pkg.bin = { [name]: bin }
@@ -54,7 +48,7 @@ async function destroyLink(name, root, verbose) {
   return remove()
 
   function remove() {
-    if (verbose) log(`unlinking ${short(link)}`)
+    if (verbose) log(`unlinking ${shorten(link)}`)
     return unlink(link);
   }
 }

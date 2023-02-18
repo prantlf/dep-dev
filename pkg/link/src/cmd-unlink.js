@@ -7,14 +7,15 @@ import unlinkDeps from './unlink-deps.js'
 // system, and removes the links right away.
 export async function unlinkDependencies(deps, { config, cwd, save, lineBreak, list, verbose, dryRun } = {}) {
   const start = performance.now()
+  if (verbose === undefined) verbose = process.env.npm_config_loglevel === 'verbose'
 
   // if no deps were specified, bail out
   if (!(deps && deps.length)) {
     return console.log('no extra dependencies to unlink')
   }
+  if (verbose) log(`unlinking dependencies: ${deps.join(', ')}`)
 
   // unlink the deps
-  if (verbose === undefined) verbose = process.env.npm_config_loglevel === 'verbose'
   if (list === undefined) list = process.env.npm_config_list !== ''
   if (dryRun === undefined) dryRun = process.env.npm_config_dry_run
   if (dryRun) {
@@ -25,7 +26,7 @@ export async function unlinkDependencies(deps, { config, cwd, save, lineBreak, l
     if (list) listDeps(deps, true)
     return
   }
-  const root = await findRoot(cwd)
+  const root = await findRoot(cwd, verbose)
   await destroyLinks(deps, root, verbose);
 
   // get and print unlinked deps
@@ -33,7 +34,7 @@ export async function unlinkDependencies(deps, { config, cwd, save, lineBreak, l
 
   // remove the unlinked deps from the config file
   if (save !== false) {
-    const root = await findRoot(cwd)
-    await unlinkDeps(deps, config, root, lineBreak)
+    const root = await findRoot(cwd, verbose)
+    await unlinkDeps(deps, config, root, lineBreak, verbose)
   }
 }

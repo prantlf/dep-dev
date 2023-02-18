@@ -8,17 +8,19 @@ import spawnProcess from '../../../src/spawn-process.js'
 import resolveDeps from '../../../src/resolve-deps.js'
 import upgradeDeps from './upgrade-deps.js'
 import isPattern from './is-pattern.js'
+import log from './log.js'
 
 // Collects peer dependencies from the specified packages and traverses them
 // recursively to collect peer dependencies of the collected packages etc.
-async function deepDeps(root, pending, visited = new Set()) {
+async function deepDeps(root, pending, verbose, visited = new Set()) {
   await Promise.all(pending.map(async dep => {
     const pkg = `${root}/node_modules/${dep}/package.json`
-    let { peerDependencies = {} } = await readJSON(pkg)
+    let { peerDependencies = {} } = await readJSON(pkg, verbose)
     peerDependencies = Object.keys(peerDependencies)
     if (peerDependencies.length) {
+      if (verbose) log(`peer dependencies found: ${peerDependencies.join(', ')}`)
       for (const dep of peerDependencies) visited.add(dep)
-      await deepDeps(root, peerDependencies, visited)
+      await deepDeps(root, peerDependencies, verbose, visited)
     }
   }))
   return visited
@@ -28,21 +30,22 @@ async function deepDeps(root, pending, visited = new Set()) {
 // to the latest compatible semver version.
 export async function upgradeDependencies(newDeps, { config, cwd, deep, save, lineBreak, progress, list, verbose, dryRun } = {}) {
   const start = performance.now()
+  if (verbose === undefined) verbose = process.env.npm_config_loglevel === 'verbose'
 
   // if no deps were specified, install all deps from the config file
   let deps = newDeps, root
   if (!(deps && deps.length)) {
     if (config) {
       if (config === true) {
-        root = await findRoot(cwd)
+        root = await findRoot(cwd, verbose)
         config = join(root, 'package-updates.json')
       } else {
         config = resolve(config)
       }
-      deps = await readJSON(config)
+      deps = await readJSON(config, verbose)
     } else {
-      root = await findRoot(cwd)
-      deps = await loadConfig('updates', root)
+      root = await findRoot(cwd, verbose)
+      deps = await loadConfig('updates', root, verbose)
     }
     deps = deps.updateDependencies
   }
@@ -51,25 +54,28 @@ export async function upgradeDependencies(newDeps, { config, cwd, deep, save, li
   }
 
   // traverse peer dependencies
-  if (!root) root = await findRoot(cwd)
-  let { dependencies = {}, devDependencies = {} } = await readJSON(join(root, 'package.json'))
+  if (!root) root = await findRoot(cwd, verbose)
+  let { dependencies = {}, devDependencies = {} } = await readJSON(join(root, 'package.json'), verbose)
   dependencies = Object.keys(dependencies)
-  const peers = deep && deps.some(isPattern) ? await deepDeps(root, dependencies) : []
+  const peers = deep && deps.some(isPattern) ? await deepDeps(root, dependencies, verbose) : []
   dependencies = new Set([...dependencies, ...peers, ...Object.keys(devDependencies)])
 
   // resolve wildcards
   deps = deps.reduce((result, pattern) => {
     if (isPattern(pattern)) {
+      if (verbose) log(`looking for dependencies matching ${pattern}`)
       const match = picomatch(pattern)
       let updated
       for (const dep of dependencies) {
         if (match(dep)) {
+          if (verbose) log(`dependency ${dep} matched`)
           result.push(dep)
           updated = true
         }
       }
       if (!updated) throw new Error(`no dependency matched ${pattern}`)
     } else {
+      if (verbose) log(`dependency ${pattern} included`)
       result.push(pattern)
     }
     return result
@@ -79,7 +85,6 @@ export async function upgradeDependencies(newDeps, { config, cwd, deep, save, li
   const args = ['up', '--no-save', '--no-package-lock', '--no-audit', '--no-update-notifier']
   if (progress === undefined) progress = !('npm_config_progress' in process.env)
   if (!progress) args.push('--no-progress')
-  if (verbose === undefined) verbose = process.env.npm_config_loglevel === 'verbose'
   if (verbose) args.push('--verbose')
   args.push(...deps);
 
@@ -98,11 +103,11 @@ export async function upgradeDependencies(newDeps, { config, cwd, deep, save, li
   await spawnProcess('npm', args, { cwd })
 
   // get and print the versions of the updated deps
-  deps = await resolveDeps(deps, root)
+  deps = await resolveDeps(deps, root, verbose)
   if (list) listDeps(deps)
 
   // save the newly added deps to the config file
   if (save !== false && newDeps && newDeps.length) {
-    await upgradeDeps(newDeps, config, root, lineBreak)
+    await upgradeDeps(newDeps, config, root, lineBreak, verbose)
   }
 }
