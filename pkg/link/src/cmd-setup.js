@@ -49,7 +49,7 @@ export async function setupLinkDependencies({ config, cwd, lineBreak, progress, 
   // make sure that the configuration file contains the dependency list
   let saveDeps
   if (!deps) {
-    deps = {}
+    deps = { linkDependencies: {} }
     saveDeps = true
   } else if (!deps.linkDependencies) {
     deps.linkDependencies = {}

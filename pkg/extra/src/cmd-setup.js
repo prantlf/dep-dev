@@ -37,7 +37,7 @@ export async function setupExtraDependencies({ config, cwd, lineBreak, progress,
   // make sure that the configuration file contains the dependency list
   let saveDeps
   if (!deps) {
-    deps = {}
+    deps = { extraDependencies: {} }
     saveDeps = true
   } else if (!deps.extraDependencies) {
     deps.extraDependencies = {}

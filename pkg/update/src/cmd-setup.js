@@ -37,7 +37,7 @@ export async function setupUpdateDependencies({ config, cwd, lineBreak, progress
   // make sure that the configuration file contains the dependency list
   let saveDeps
   if (!deps) {
-    deps = {}
+    deps = { updateDependencies: [] }
     saveDeps = true
   } else if (!deps.updateDependencies) {
     deps.updateDependencies = []
