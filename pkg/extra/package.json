@@ -1,7 +1,7 @@
 {
   "name": "@pkgdep/extra",
   "description": "Installs extra configured NPM packages without saving them as dependencies to package.json.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "homepage": "https://github.com/prantlf/dep-dev/tree/master/pkg/extra#readme",
   "author": {
     "name": "Ferdinand Prantl",
