@@ -62,6 +62,9 @@
       "@semantic-release/git"
     ]
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "bin-links": "4.0.1"
   },

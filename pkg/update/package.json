@@ -62,6 +62,9 @@
       "@semantic-release/git"
     ]
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@pkgdep/update": "link:",
     "@semantic-release/changelog": "6.0.2",
