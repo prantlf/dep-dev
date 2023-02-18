@@ -1,6 +1,7 @@
 import resolveConfig from '../../../src/resolve-config.js'
 import writeJSON from '../../../src/write-json.js'
 
+// Adds the specified dependencies to the list for linking.
 export default async function linkDeps(deps, config, root, lineBreak) {
   let pkg
   ({ config, pkg } = await resolveConfig('links', config, root, true, 'linkDependencies'))

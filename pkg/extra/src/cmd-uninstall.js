@@ -3,6 +3,8 @@ import spawnProcess from '../../../src/spawn-process.js'
 import findRoot from '../../../src/find-root.js'
 import removeDeps from './remove-deps.js'
 
+// Stops installing the extra specified dependencies and uninstalls them
+// right away.
 export async function uninstallExtraDependencies(deps, { config, cwd, save, lineBreak, progress, list, verbose, dryRun } = {}) {
   const start = performance.now()
 
@@ -24,6 +26,7 @@ export async function uninstallExtraDependencies(deps, { config, cwd, save, line
   if (list === undefined) list = process.env.npm_config_list !== ''
   if (dryRun === undefined) dryRun = process.env.npm_config_dry_run
   if (dryRun) {
+    // simulate the npm output
     const duration = Math.trunc(performance.now() - start)
     const suffix = deps.length > 1 ? 's' : ''
     console.log(`\nremoved ${deps.length} package${suffix} in ${duration}ms`)

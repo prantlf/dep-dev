@@ -9,6 +9,8 @@ import resolveDeps from '../../../src/resolve-deps.js'
 import upgradeDeps from './upgrade-deps.js'
 import isPattern from './is-pattern.js'
 
+// Collects peer dependencies from the specified packages and traverses them
+// recursively to collect peer dependencies of the collected packages etc.
 async function deepDeps(root, pending, visited = new Set()) {
   await Promise.all(pending.map(async dep => {
     const pkg = `${root}/node_modules/${dep}/package.json`
@@ -22,6 +24,8 @@ async function deepDeps(root, pending, visited = new Set()) {
   return visited
 }
 
+// Enables upgrading the specified dependencies and upgrades them
+// to the latest compatible semver version.
 export async function upgradeDependencies(newDeps, { config, cwd, deep, save, lineBreak, progress, list, verbose, dryRun } = {}) {
   const start = performance.now()
 
@@ -84,6 +88,7 @@ export async function upgradeDependencies(newDeps, { config, cwd, deep, save, li
   if (list === undefined) list = process.env.npm_config_list !== ''
   if (dryRun === undefined) dryRun = process.env.npm_config_dry_run
   if (dryRun) {
+    // simulate the npm output
     const duration = Math.trunc(performance.now() - start)
     const suffix = deps.length > 1 ? 's' : ''
     console.log(`\nupdated ${deps.length} package${suffix} in ${duration}ms`)

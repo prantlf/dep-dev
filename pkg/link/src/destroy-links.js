@@ -2,10 +2,13 @@ import { lstat, realpath, rm, unlink } from 'fs/promises'
 import { join, relative } from 'path'
 import readJSON from '../../../src/read-json.js'
 
+// Logs a message with the prefix of this package.
 function log(message) {
   console.log('dep-link', message)
 }
 
+// Removes a link to a dependency directory and all bin scripts from that
+// dependency that were installed to node_modules/.bin.
 async function destroyLink(name, root, verbose) {
   const cwd = process.cwd()
   const short = path => relative(cwd, path)
@@ -56,6 +59,8 @@ async function destroyLink(name, root, verbose) {
   }
 }
 
+// Removes links to specified dependency directories and all bin scripts
+// from those dependencies that were installed to node_modules/.bin.
 export default async function destroyLinks(deps, root, verbose) {
   const start = performance.now()
 

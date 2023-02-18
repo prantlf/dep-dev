@@ -1,16 +1,16 @@
 import { join, resolve  } from 'path'
 import { readFile, writeFile } from 'fs/promises'
-import getPkg from '../../../src/get-pkg.js'
 import readJSON from '../../../src/read-json.js'
 import findRoot from '../../../src/find-root.js'
-import listDeps from '../../../src/list-deps.js'
-import spawnProcess from '../../../src/spawn-process.js'
-import resolveDeps from '../../../src/resolve-deps.js'
 import writeJSON from '../../../src/write-json.js'
+import installTool from '../../../src/install-tool.js'
 
+// Prepares package.json and other configuration files to automate linking
+// of selected dependencies using this package.
 export async function setupLinkDependencies({ config, cwd, lineBreak, progress, list, verbose, dryRun } = {}) {
   const start = performance.now()
 
+  // find the preferred configuration file and the sibling .gitignore
   const root = await findRoot(cwd)
   const pkg = join(root, 'package.json')
   if (config === true || config === undefined) config = join(root, 'package-links.json')
@@ -19,6 +19,7 @@ export async function setupLinkDependencies({ config, cwd, lineBreak, progress, 
   const same = config === pkg
   const git = join(root, '.gitignore')
 
+  // load all package.json, the configuration file if separate and .gitignore
   const readDeps = async () => {
     try {
       return await readJSON(config)
@@ -38,6 +39,7 @@ export async function setupLinkDependencies({ config, cwd, lineBreak, progress, 
   ])
   if (same) deps = proj
 
+  // make sure that the configuration file contains the dependency list
   let saveDeps
   if (!deps) {
     deps = {}
@@ -47,8 +49,9 @@ export async function setupLinkDependencies({ config, cwd, lineBreak, progress, 
     saveDeps = true
   }
 
+  // automate the linking in the npm prepare phase as the second step
   let saveProj
-  let { scripts, dependencies, devDependencies } = proj
+  const { scripts, dependencies, devDependencies } = proj
   if (!scripts) {
     proj.scripts = { prepare: 'dep-link ln' }
     saveProj = true
@@ -69,6 +72,7 @@ export async function setupLinkDependencies({ config, cwd, lineBreak, progress, 
     saveProj = true
   }
 
+  // ensure the separate link configuration file in .gitignore
   let saveIgnore
   if (!same && !(ignore && /\bpackage-links.json\b/g.test(ignore))) {
     if (ignore === undefined) ignore = ''
@@ -77,6 +81,7 @@ export async function setupLinkDependencies({ config, cwd, lineBreak, progress, 
     saveIgnore = true
   }
 
+  // write changes to package.json separate configuration file and .gitignore
   const writeConfigAndProj = async () => {
     if (same) {
       if (saveDeps || saveProj) await writeJSON(config, deps, lineBreak)
@@ -92,29 +97,9 @@ export async function setupLinkDependencies({ config, cwd, lineBreak, progress, 
   }
   if (!dryRun) await Promise.all([writeConfigAndProj(), writeGit()])
 
+  // add this package to development dependencies
   if (!(dependencies && dependencies['@pkgdep/link'] ||
-    devDependencies && devDependencies['@pkgdep/link'])) {
-    if (!devDependencies) devDependencies = proj.devDependencies = {}
-
-    const args = ['i', '-D']
-    if (progress === false) args.push('--no-progress')
-    if (verbose) args.push('--verbose')
-    args.push('@pkgdep/link');
-  
-    if (verbose) console.log(`> npm ${args.join(' ')}`)
-    if (dryRun) {
-      const duration = Math.trunc(performance.now() - start)
-      console.log(`\nadded 1 package in ${duration}ms`)
-      if (list !== false) {
-        const { version } = await getPkg()
-        listDeps({ '@pkgdep/link': version })
-      }
-    } else {
-      await spawnProcess('npm', args, { cwd })
-      if (list !== false) {
-        const { '@pkgdep/link': version } = await resolveDeps(['@pkgdep/link'], root)
-        listDeps({ '@pkgdep/link': version })
-      }
-    }
+      devDependencies && devDependencies['@pkgdep/link'])) {
+    await installTool('@pkgdep/link', root, list, progress, verbose, dryRun, start)
   }
 }

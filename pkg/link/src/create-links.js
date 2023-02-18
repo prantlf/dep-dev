@@ -3,10 +3,13 @@ import { dirname, join, relative, resolve } from 'path'
 import readJSON from '../../../src/read-json.js'
 import binLinks from 'bin-links'
 
+// Logs a message with the prefix of this package.
 function log(message) {
   console.log('dep-link', message)
 }
 
+// Creates a link to a dependency directory and installs all bin scripts
+// from that dependency to node_modules/.bin.
 async function createLink(name, root, target, type, verbose) {
   const cwd = process.cwd()
   const short = path => relative(cwd, path)
@@ -59,6 +62,8 @@ async function createLink(name, root, target, type, verbose) {
   }
 }
 
+// Creates links to dpecified dependency directories and installs all bin
+// scripts from those dependencies to node_modules/.bin.
 export default async function createLinks(deps, root, junctions, verbose) {
   const start = performance.now()
 

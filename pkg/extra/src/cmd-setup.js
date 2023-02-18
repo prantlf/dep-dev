@@ -1,15 +1,15 @@
 import { join, resolve } from 'path'
-import getPkg from '../../../src/get-pkg.js'
 import readJSON from '../../../src/read-json.js'
 import findRoot from '../../../src/find-root.js'
-import listDeps from '../../../src/list-deps.js'
-import spawnProcess from '../../../src/spawn-process.js'
-import resolveDeps from '../../../src/resolve-deps.js'
 import writeJSON from '../../../src/write-json.js'
+import installTool from '../../../src/install-tool.js'
 
+// Prepares package.json and other configuration files to automate installing
+// of extra selected dependencies using this package.
 export async function setupExtraDependencies({ config, cwd, lineBreak, progress, list, verbose, dryRun } = {}) {
   const start = performance.now()
 
+  // find the preferred configuration file
   const root = await findRoot(cwd)
   const pkg = join(root, 'package.json')
   if (config === true) config = join(root, 'package-extras.json')
@@ -17,6 +17,7 @@ export async function setupExtraDependencies({ config, cwd, lineBreak, progress,
   else config = resolve(config)
   const same = config === pkg
 
+  // load both package.json and the configuration file, the same or separate
   const proj = await readJSON(pkg)
   let deps
   if (same) {
@@ -29,6 +30,7 @@ export async function setupExtraDependencies({ config, cwd, lineBreak, progress,
     }
   }
 
+  // make sure that the configuration file contains the dependency list
   let saveDeps
   if (!deps) {
     deps = {}
@@ -38,8 +40,9 @@ export async function setupExtraDependencies({ config, cwd, lineBreak, progress,
     saveDeps = true
   }
 
+  // automate the installation in the npm prepare phase as the first step
   let saveProj
-  let { scripts, dependencies, devDependencies } = proj
+  const { scripts, dependencies, devDependencies } = proj
   if (!scripts) {
     proj.scripts = { prepare: 'dep-extra i' }
     saveProj = true
@@ -54,6 +57,7 @@ export async function setupExtraDependencies({ config, cwd, lineBreak, progress,
     }
   }
 
+  // write changes to package.json separate configuration file and .gitignore
   if (dryRun === undefined) dryRun = process.env.npm_config_dry_run
   if (!dryRun) {
     if (same) {
@@ -66,32 +70,9 @@ export async function setupExtraDependencies({ config, cwd, lineBreak, progress,
     }
   }
 
+  // add this package to development dependencies
   if (!(dependencies && dependencies['@pkgdep/extra'] ||
-    devDependencies && devDependencies['@pkgdep/extra'])) {
-    if (!devDependencies) devDependencies = proj.devDependencies = {}
-
-    const args = ['i', '-D']
-    if (progress === undefined) progress = !('npm_config_progress' in process.env)
-    if (!progress) args.push('--no-progress')
-    if (verbose === undefined) verbose = process.env.npm_config_loglevel === 'verbose'
-    if (verbose) args.push('--verbose')
-    args.push('@pkgdep/extra');
-  
-    if (verbose) console.log(`> npm ${args.join(' ')}`)
-    if (list === undefined) list = process.env.npm_config_list !== ''
-    if (dryRun) {
-      const duration = Math.trunc(performance.now() - start)
-      console.log(`\nadded 1 package in ${duration}ms`)
-      if (list) {
-        const { version } = await getPkg()
-        listDeps({ '@pkgdep/extra': version })
-      }
-    } else {
-      await spawnProcess('npm', args, { cwd })
-      if (list) {
-        const { '@pkgdep/extra': version } = await resolveDeps(['@pkgdep/extra'], root)
-        listDeps({ '@pkgdep/extra': version })
-      }
-    }
+      devDependencies && devDependencies['@pkgdep/extra'])) {
+    await installTool('@pkgdep/extra', root, list, progress, verbose, dryRun, start)
   }
 }

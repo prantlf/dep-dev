@@ -7,6 +7,8 @@ import spawnProcess from '../../../src/spawn-process.js'
 import resolveDeps from '../../../src/resolve-deps.js'
 import addDeps from './add-deps.js'
 
+// Enables installing the extra specified dependencies and performs
+// the installation right away.
 export async function installExtraDependencies(newDeps, { config, cwd, save, lineBreak, progress, list, verbose, dryRun } = {}) {
   const start = performance.now()
 
@@ -47,6 +49,7 @@ export async function installExtraDependencies(newDeps, { config, cwd, save, lin
   if (list === undefined) list = process.env.npm_config_list !== ''
   if (dryRun === undefined) dryRun = process.env.npm_config_dry_run
   if (dryRun) {
+    // simulate the npm output
     const duration = Math.trunc(performance.now() - start)
     const suffix = deps.length > 1 ? 's' : ''
     console.log(`\nadded ${deps.length} package${suffix} in ${duration}ms`)

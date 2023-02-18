@@ -3,6 +3,8 @@ import findRoot from '../../../src/find-root.js'
 import destroyLinks from './destroy-links.js'
 import unlinkDeps from './unlink-deps.js'
 
+// Stops linking the specified dependencies to directories in the local file
+// system, and removes the links right away.
 export async function unlinkDependencies(deps, { config, cwd, save, lineBreak, list, verbose, dryRun } = {}) {
   const start = performance.now()
 
@@ -16,6 +18,7 @@ export async function unlinkDependencies(deps, { config, cwd, save, lineBreak, l
   if (list === undefined) list = process.env.npm_config_list !== ''
   if (dryRun === undefined) dryRun = process.env.npm_config_dry_run
   if (dryRun) {
+    // simulate the output of the unlinking script
     const duration = Math.trunc(performance.now() - start)
     const suffix = deps.length > 1 ? 's' : ''
     console.log(`\nunlinked ${deps.length} package${suffix} in ${duration}ms`)

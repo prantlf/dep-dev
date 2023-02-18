@@ -7,6 +7,8 @@ import createLinks from './create-links.js'
 import listDeps from '../../../src/list-deps.js'
 import linkDeps from './link-deps.js'
 
+// Enables linking the specified dependencies to directories in the local file
+// system and creates the links right away.
 export async function linkDependencies(newDeps, { config, cwd, junctions, save, lineBreak, list, verbose, dryRun } = {}) {
   const start = performance.now()
 
@@ -56,6 +58,7 @@ export async function linkDependencies(newDeps, { config, cwd, junctions, save, 
   if (list === undefined) list = process.env.npm_config_list !== ''
   if (dryRun === undefined) dryRun = process.env.npm_config_dry_run
   if (dryRun) {
+    // simulate the output of the linking script
     const duration = Math.trunc(performance.now() - start)
     const suffix = length > 1 ? 's' : ''
     console.log(`\nlinked ${length} package${suffix} in ${duration}ms`)

@@ -7,6 +7,8 @@ import findRoot from '../../../src/find-root.js'
 import downgradeDeps from './downgrade-deps.js'
 import isPattern from './is-pattern.js'
 
+// Stops upgrading the specified dependencies and downgrades them
+// to the version set in the package lock.
 export async function downgradeDependencies(depNames, { config, cwd, save, lineBreak, progress, list, verbose, dryRun } = {}) {
   const start = performance.now()
 
@@ -15,7 +17,7 @@ export async function downgradeDependencies(depNames, { config, cwd, save, lineB
     return console.log('no dependencies to downgrade')
   }
 
-  // append the version specifiers
+  // append the version specifiers from the package lock to dependency names
   const root = await findRoot(cwd)
   const { packages } = await readJSON(join(root, 'package-lock.json'))
   const deps = depNames.reduce((result, pattern) => {
@@ -54,6 +56,7 @@ export async function downgradeDependencies(depNames, { config, cwd, save, lineB
   if (list === undefined) list = process.env.npm_config_list !== ''
   if (dryRun === undefined) dryRun = process.env.npm_config_dry_run
   if (dryRun) {
+    // simulate the npm output
     const duration = Math.trunc(performance.now() - start)
     const suffix = deps.length > 1 ? 's' : ''
     console.log(`\ndowngraded ${deps.length} package${suffix} in ${duration}ms`)

@@ -7,6 +7,7 @@ import {
   upgradeDependencies, downgradeDependencies, setupUpdateDependencies
 } from '../dist/index.js'
 
+// load package.json of this package
 function getPkg() {
   const __dirname = dirname(fileURLToPath(import.meta.url))
   return JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf8'))
@@ -58,15 +59,17 @@ function fail(message) {
 // collect the options from the args
 for (let i = 2, l = argv.length; i < l; ++i) {
   const arg = argv[i]
+  // matched groups: 1:-|-- 2:[no] 3:option 4:[=value]
   const match = /^(-|--)(no-)?([a-zA-Z][-a-zA-Z]*)(?:=(.*))?$/.exec(arg)
   if (match) {
+    const value = () => match[4] || argv[++i]
     const parseArg = (arg, flag) => {
       switch (arg) {
         case 'c': case 'config':
-          config = match[4] || argv[++i]
+          config = value()
           return
         case 'd': case 'directory':
-          cwd = match[4] || argv[++i]
+          cwd = value()
           return
         case 'e': case 'deep':
           deep = flag
@@ -115,17 +118,22 @@ for (let i = 2, l = argv.length; i < l; ++i) {
       fail(`unknown option: "${arg}"`)
     }
     if (match[1] === '-') {
+      // single option letters after a single dash may be joined
       const flags = match[3].split('')
       for (const flag of flags) parseArg(flag, true)
     } else {
+      // a long option may be followed by =value, or the value will be
+      // in the next argument
       parseArg(match[3], match[2] !== 'no-')
     }
     continue
   }
+  // double-dash divides options from other arguments, which may start with a dash
   if (arg === '--') {
     args.push(...argv.slice(i + 1, l))
     break
   }
+  // an argument not starting with a dash is not an option
   args.push(arg)
 }
 
