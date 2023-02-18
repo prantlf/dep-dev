@@ -1,3 +1,10 @@
+# [@pkgdep/link-v1.2.1](https://github.com/prantlf/dep-dev/compare/@pkgdep/link-v1.2.0...@pkgdep/link-v1.2.1) (2023-02-18)
+
+
+### Bug Fixes
+
+* Ensure an empty list of enabled dependencies ([22fe96b](https://github.com/prantlf/dep-dev/commit/22fe96bdd20198bf0cd6a0e357ea3ecf03c82667))
+
 # [@pkgdep/link-v1.2.0](https://github.com/prantlf/dep-dev/compare/@pkgdep/link-v1.1.1...@pkgdep/link-v1.2.0) (2023-02-18)
 
 
