@@ -1,3 +1,10 @@
+# [@pkgdep/link-v1.1.1](https://github.com/prantlf/dep-dev/compare/@pkgdep/link-v1.1.0...@pkgdep/link-v1.1.1) (2023-02-18)
+
+
+### Bug Fixes
+
+* If pkg-update is called, set up pkg-link after it ([a72f78c](https://github.com/prantlf/dep-dev/commit/a72f78c6138295b4bc90a374b1f596a3b5e680fd))
+
 # [@pkgdep/link-v1.1.0](https://github.com/prantlf/dep-dev/compare/@pkgdep/link-v1.0.0...@pkgdep/link-v1.1.0) (2023-02-15)
 
 
