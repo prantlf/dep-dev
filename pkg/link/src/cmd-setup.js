@@ -60,6 +60,8 @@ export async function setupLinkDependencies({ config, cwd, lineBreak, progress, 
     } else if (!/\bdep-link\b/.test(prepare)) {
       if (/\bdep-extra\b/.test(prepare)) {
         scripts.prepare = prepare.replace(/\b(dep-extra[^&;]+)\b/, '$1 && dep-link ln')
+      } else if (/\bdep-update\b/.test(prepare)) {
+        scripts.prepare = prepare.replace(/\b(dep-update[^&;]+)\b/, '$1 && dep-link ln')
       } else {
         scripts.prepare = `dep-link ln && ${prepare}`
       }
