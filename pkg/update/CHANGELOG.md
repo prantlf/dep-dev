@@ -1,3 +1,10 @@
+# [@pkgdep/update-v1.5.0](https://github.com/prantlf/dep-dev/compare/@pkgdep/update-v1.4.1...@pkgdep/update-v1.5.0) (2023-02-19)
+
+
+### Features
+
+* Do not install extra deps that are already present ([aded86a](https://github.com/prantlf/dep-dev/commit/aded86a734ec5363cefb5bb667d3d6ff57d56f84))
+
 # [@pkgdep/update-v1.4.1](https://github.com/prantlf/dep-dev/compare/@pkgdep/update-v1.4.0...@pkgdep/update-v1.4.1) (2023-02-18)
 
 
