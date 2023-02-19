@@ -1,5 +1,10 @@
 lockfileVersion: 5.4
 
+patchedDependencies:
+  '@semantic-release/npm@9.0.2':
+    hash: 6zd5rk63mjhusyxdqpy76iit3i
+    path: patches/@semantic-release__npm@9.0.2.patch
+
 importers:
 
   .:
@@ -409,7 +414,7 @@ packages:
       - supports-color
     dev: true
 
-  /@semantic-release/npm/9.0.2_semantic-release@20.1.0:
+  /@semantic-release/npm/9.0.2_6zd5rk63mjhusyxdqpy76iit3i_semantic-release@20.1.0:
     resolution: {integrity: sha512-zgsynF6McdzxPnFet+a4iO9HpAlARXOM5adz7VGVCvj0ne8wtL2ZOQoDV2wZPDmdEotDIbVeJjafhelZjs9j6g==}
     engines: {node: '>=16 || ^14.17'}
     peerDependencies:
@@ -430,6 +435,7 @@ packages:
       semver: 7.3.8
       tempy: 1.0.1
     dev: true
+    patched: true
 
   /@semantic-release/release-notes-generator/10.0.3_semantic-release@20.1.0:
     resolution: {integrity: sha512-k4x4VhIKneOWoBGHkx0qZogNjCldLPRiAjnIpMnlUh6PtaWXp/T+C9U7/TaNDDtgDa5HMbHl4WlREdxHio6/3w==}
@@ -2271,7 +2277,7 @@ packages:
       '@semantic-release/commit-analyzer': 9.0.2_semantic-release@20.1.0
       '@semantic-release/error': 3.0.0
       '@semantic-release/github': 8.0.7_semantic-release@20.1.0
-      '@semantic-release/npm': 9.0.2_semantic-release@20.1.0
+      '@semantic-release/npm': 9.0.2_6zd5rk63mjhusyxdqpy76iit3i_semantic-release@20.1.0
       '@semantic-release/release-notes-generator': 10.0.3_semantic-release@20.1.0
       aggregate-error: 4.0.1
       cosmiconfig: 8.0.0
