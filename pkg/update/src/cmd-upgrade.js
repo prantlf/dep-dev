@@ -103,7 +103,7 @@ export async function upgradeDependencies(newDeps, { config, cwd, deep, save, li
   await spawnProcess('npm', args, { cwd })
 
   // get and print the versions of the updated deps
-  deps = await resolveDeps(deps, root, verbose)
+  deps = await resolveDeps(deps, root, true, verbose)
   if (list) listDeps(deps)
 
   // save the newly added deps to the config file

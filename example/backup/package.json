@@ -2,7 +2,7 @@
   "private": true,
   "dependencies": {
     "build-number-generator": "2.0.4",
-    "common-path-start": "0.0.4"
+    "common-path-start": "0.0.3"
   },
   "devDependencies": {
     "@pkgdep/extra": "file:../pkg/extra",

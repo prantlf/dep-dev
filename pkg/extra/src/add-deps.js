@@ -8,7 +8,11 @@ export default async function addDeps(deps, versions, config, root, lineBreak, v
 
   let { extraDependencies } = pkg
   if (!extraDependencies) extraDependencies = pkg.extraDependencies = {}
-  for (const name of deps) extraDependencies[name] = versions[name]
+  for (const dep of deps) {
+    const version = dep.indexOf('@', 1)
+    const name = version > 0 ? dep.slice(0, version) : dep
+    extraDependencies[name] = versions[name]
+  }
 
   await writeJSON(config, pkg, lineBreak, verbose)
 }

@@ -14,35 +14,49 @@ export async function uninstallExtraDependencies(deps, { config, cwd, save, line
   if (!(deps && deps.length)) {
     return console.log('no extra dependencies to uninstall')
   }
-  if (verbose) log(`uninstalling dependencies: ${deps.join(', ')}`)
+  if (verbose) log(`requested to uninstall: ${deps.join(', ')}`)
 
   // collect all arguments for the npm execution
   const args = ['r', '--no-save', '--no-package-lock', '--no-audit', '--no-update-notifier']
   if (progress === undefined) progress = !('npm_config_progress' in process.env)
   if (!progress) args.push('--no-progress')
   if (verbose) args.push('--verbose')
-  args.push(...deps);
+  // remove only packages found in node_modules
+  const root = await findRoot(cwd, verbose)
+  const detectedDeps = await resolveDeps(deps, root, false, verbose)
+  const depsToRemove = deps.filter(dep => {
+    const version = dep.indexOf('@', 1)
+    const name = version > 0 ? dep.slice(0, version) : dep
+    return detectedDeps[name];
+  })
 
-  // uninstall the extra deps using `npm r --no-save ...`
-  if (verbose) console.log(`> npm ${args.join(' ')}`)
-  if (list === undefined) list = process.env.npm_config_list !== ''
-  if (dryRun === undefined) dryRun = process.env.npm_config_dry_run
-  if (dryRun) {
-    // simulate the npm output
-    const duration = Math.trunc(performance.now() - start)
-    const suffix = deps.length > 1 ? 's' : ''
-    console.log(`\nremoved ${deps.length} package${suffix} in ${duration}ms`)
-    if (list) listDeps(deps)
-    return
-  }
-  await spawnProcess('npm', args, { cwd })
+  // only if some packages to uninstall were found
+  if (depsToRemove.length) {
+    log(`actually uninstalling: ${depsToRemove.join(', ')}`)
+    args.push(...depsToRemove);
 
-  // get and print uninstalled extra deps
-  if (list) listDeps(deps)
+    // uninstall the extra deps using `npm r --no-save ...`
+    if (verbose) console.log(`> npm ${args.join(' ')}`)
+    if (list === undefined) list = process.env.npm_config_list !== ''
+    if (dryRun === undefined) dryRun = process.env.npm_config_dry_run
+    if (dryRun) {
+      // simulate the npm output
+      const duration = Math.trunc(performance.now() - start)
+      const suffix = depsToRemove.length > 1 ? 's' : ''
+      console.log(`\nremoved ${depsToRemove.length} package${suffix} in ${duration}ms`)
+      if (list) listDeps(depsToRemove)
+      return
+    }
+    await spawnProcess('npm', args, { cwd })
 
-  // remove the uninstalled deps from the config file
-  if (save !== false) {
-    const root = await findRoot(cwd, verbose)
-    await removeDeps(deps, config, root, lineBreak, verbose)
+    // get and print uninstalled extra deps
+    if (list) listDeps(depsToRemove)
+
+    // remove the uninstalled deps from the config file
+    if (save !== false) {
+      await removeDeps(depsToRemove, config, root, lineBreak, verbose)
+    }
+  } else {
+    log('nothing to actually uninstall')
   }
 }

@@ -74,7 +74,7 @@ echo ">>> checking output"
 check_file "../package-links.json"
 
 echo ">>> adding extras"
-./node_modules/.bin/dep-extra i $VERBOSE common-path-start 
+./node_modules/.bin/dep-extra i $VERBOSE common-path-start@latest
 if [ "$?" != "0" ]; then exit 1; fi
 
 echo ">>> adding links"

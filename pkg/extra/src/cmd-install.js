@@ -35,7 +35,7 @@ export async function installExtraDependencies(newDeps, { config, cwd, save, lin
     if (!Array.isArray(deps)) {
       deps = Object.keys(deps).map(name => `${name}@${deps[name]}`)
     } else if (verbose) {
-      log(`installing dependencies: ${deps.join(', ')}`)
+      log(`requested to install: ${deps.join(', ')}`)
     }
   }
   if (!(deps && deps.length)) {
@@ -47,29 +47,50 @@ export async function installExtraDependencies(newDeps, { config, cwd, save, lin
   if (progress === undefined) progress = !('npm_config_progress' in process.env)
   if (!progress) args.push('--no-progress')
   if (verbose) args.push('--verbose')
-  args.push(...deps);
-
-  // install the extra deps using `npm i --no-save ...`
-  if (verbose) console.log(`> npm ${args.join(' ')}`)
-  if (list === undefined) list = process.env.npm_config_list !== ''
-  if (dryRun === undefined) dryRun = process.env.npm_config_dry_run
-  if (dryRun) {
-    // simulate the npm output
-    const duration = Math.trunc(performance.now() - start)
-    const suffix = deps.length > 1 ? 's' : ''
-    console.log(`\nadded ${deps.length} package${suffix} in ${duration}ms`)
-    if (list) listDeps(deps)
-    return
-  }
-  await spawnProcess('npm', args, { cwd })
-
-  // get and print the versions of the installed extra deps
+  // add only dependencies which exact versions are missing in node_modules
   if (!root) root = await findRoot(cwd, verbose)
-  deps = await resolveDeps(deps, root, verbose)
-  if (list) listDeps(deps)
+  const detectedDeps = await resolveDeps(deps, root, false, verbose)
+  const depsToInstall = deps.filter(dep => {
+    const versionIndex = dep.indexOf('@', 1)
+    let name, version
+    if (versionIndex > 0) {
+      name = dep.slice(0, versionIndex)
+      version = dep.slice(versionIndex + 1)
+    } else {
+      name = dep
+    }
+    // either the package was not found or its exact version different
+    return !(version && version === detectedDeps[name])
+  })
 
-  // save the newly added deps to the config file
-  if (save !== false && newDeps && newDeps.length) {
-    await addDeps(newDeps, deps, config, root, lineBreak, verbose)
+  // only if some packages to ninstall were found
+  if (depsToInstall.length) {
+    log(`actually installing: ${depsToInstall.join(', ')}`)
+    args.push(...depsToInstall);
+
+    // install the extra deps using `npm i --no-save ...`
+    if (verbose) console.log(`> npm ${args.join(' ')}`)
+    if (list === undefined) list = process.env.npm_config_list !== ''
+    if (dryRun === undefined) dryRun = process.env.npm_config_dry_run
+    if (dryRun) {
+      // simulate the npm output
+      const duration = Math.trunc(performance.now() - start)
+      const suffix = depsToInstall.length > 1 ? 's' : ''
+      console.log(`\nadded ${depsToInstall.length} package${suffix} in ${duration}ms`)
+      if (list) listDeps(depsToInstall)
+      return
+    }
+    await spawnProcess('npm', args, { cwd })
+
+    // get and print the versions of the installed extra deps
+    deps = await resolveDeps(depsToInstall, root, true, verbose)
+    if (list) listDeps(deps)
+
+    // save the newly added deps to the config file
+    if (save !== false && newDeps && newDeps.length) {
+      await addDeps(newDeps, deps, config, root, lineBreak, verbose)
+    }
+  } else {
+    log('nothing to actually install')
   }
 }

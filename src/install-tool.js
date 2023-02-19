@@ -22,7 +22,7 @@ export default async function installTool(name, root, list, progress, verbose, d
   } else {
     await spawnProcess('npm', args, { cwd })
     if (list !== false) {
-      const { [name]: version } = await resolveDeps([name], root, verbose)
+      const { [name]: version } = await resolveDeps([name], root, true, verbose)
       listDeps({ [name]: version })
     }
   }
