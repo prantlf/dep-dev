@@ -1,3 +1,10 @@
+# [@pkgdep/link-v1.2.2](https://github.com/prantlf/dep-dev/compare/@pkgdep/link-v1.2.1...@pkgdep/link-v1.2.2) (2023-02-19)
+
+
+### Bug Fixes
+
+* Remove doubled logging ([bafa402](https://github.com/prantlf/dep-dev/commit/bafa4022ced519cb0693102e3ca553c16b9a3cd6))
+
 # [@pkgdep/link-v1.2.1](https://github.com/prantlf/dep-dev/compare/@pkgdep/link-v1.2.0...@pkgdep/link-v1.2.1) (2023-02-18)
 
 
