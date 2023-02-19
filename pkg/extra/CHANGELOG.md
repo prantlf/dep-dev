@@ -1,3 +1,10 @@
+# [@pkgdep/extra-v1.3.0](https://github.com/prantlf/dep-dev/compare/@pkgdep/extra-v1.2.1...@pkgdep/extra-v1.3.0) (2023-02-19)
+
+
+### Features
+
+* Do not install extra deps that are already present ([aded86a](https://github.com/prantlf/dep-dev/commit/aded86a734ec5363cefb5bb667d3d6ff57d56f84))
+
 # [@pkgdep/extra-v1.2.1](https://github.com/prantlf/dep-dev/compare/@pkgdep/extra-v1.2.0...@pkgdep/extra-v1.2.1) (2023-02-18)
 
 
