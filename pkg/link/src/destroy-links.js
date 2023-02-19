@@ -30,7 +30,6 @@ async function destroyLink(name, root, verbose) {
   if (!prev) return
   if (!real) return remove()
 
-  if (verbose) log(`reading package.json from ${shorten(link)}`)
   const pkg = await readJSON(join(link, 'package.json'), verbose)
   const { bin } = pkg
   if (bin) {

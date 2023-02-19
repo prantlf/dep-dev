@@ -42,7 +42,6 @@ async function createLink(name, root, target, type, verbose) {
   if (verbose) log(`creating link ${shorten(link)} pointing to ${shorten(path)}`)
 	await symlink(path, link, type)
 
-  if (verbose) log(`reading package.json from ${shorten(link)}`)
   const pkg = await readJSON(join(link, 'package.json'), verbose)
   const { bin } = pkg
   if (bin) {
