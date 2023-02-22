@@ -1,3 +1,11 @@
+# [@pkgdep/update-v1.5.1](https://github.com/prantlf/dep-dev/compare/@pkgdep/update-v1.5.0...@pkgdep/update-v1.5.1) (2023-02-22)
+
+
+### Bug Fixes
+
+* Do not use --no-package-lock ([fd892c7](https://github.com/prantlf/dep-dev/commit/fd892c75bfc6fedbbc855c63b791c79a9be8a207))
+* Fix the installation of the .bin script ([7093f84](https://github.com/prantlf/dep-dev/commit/7093f8417102ce0251c3fcf45e4ddc58f933c50f))
+
 # [@pkgdep/update-v1.5.0](https://github.com/prantlf/dep-dev/compare/@pkgdep/update-v1.4.1...@pkgdep/update-v1.5.0) (2023-02-19)
 
 
