@@ -35,7 +35,7 @@
     "types": "./dist/index.d.ts"
   },
   "bin": {
-    "@pkgdep/update": "bin/@pkgdep/update.js"
+    "dep-update": "bin/dep-update.js"
   },
   "files": [
     "bin",
