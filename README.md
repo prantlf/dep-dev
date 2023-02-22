@@ -32,8 +32,8 @@ Package managers [PNPM] and [Yarn] aren't supported, because they didn't impleme
 
 Automate installing of extra NPM packages and linking of local NPM packages:
 
-    npx @pkgdep/extra s
-    npx @pkgdep/link s
+    npx dep-extra s
+    npx dep-link s
 
 Add extra NPM packages to be installed and local NPM packages to be linked:
 
@@ -81,8 +81,8 @@ See [`@pkgdep/extra`] and [`@pkgdep/link`] for more information about their usag
 
 Automate updating of selectedNPM packages and linking of local NPM packages:
 
-    npx @pkgdep/update s
-    npx @pkgdep/link s
+    npx dep-update s
+    npx dep-link s
 
 Add selected NPM packages to be updated and local NPM packages to be linked:
 

@@ -56,7 +56,7 @@ If you need to install extra NPM packages, which aren't managed by `package.json
 
 If you need to keep more extra NPM packages installed, repeated re-installations will make your work inefficient. You can enable automatic installation of the extra NPM packages together with the managed ones:
 
-    npx @pkgdep/extra s
+    npx dep-extra s
     npx dep-extra i some-package
 
 And the installation of both managed and extra NPM packages will become simpler:
@@ -81,7 +81,7 @@ The contents of `package.json` will be extended with a preparation script, a dev
 
 If you want to store the extra dependencies outside of `package.json`, you can request the file name `package-extras.json`, which will be tried by default before `package.json`:
 
-    npx @pkgdep/extra s -c package-extras.json
+    npx dep-extra s -c package-extras.json
 
 If you want to automate linking of NPM packages, you can engage [`@pkgdep/link`] too. See the [example on the project page].
 
