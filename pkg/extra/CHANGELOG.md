@@ -1,3 +1,10 @@
+# [@pkgdep/extra-v1.3.1](https://github.com/prantlf/dep-dev/compare/@pkgdep/extra-v1.3.0...@pkgdep/extra-v1.3.1) (2023-02-22)
+
+
+### Bug Fixes
+
+* Do not use --no-package-lock ([fd892c7](https://github.com/prantlf/dep-dev/commit/fd892c75bfc6fedbbc855c63b791c79a9be8a207))
+
 # [@pkgdep/extra-v1.3.0](https://github.com/prantlf/dep-dev/compare/@pkgdep/extra-v1.2.1...@pkgdep/extra-v1.3.0) (2023-02-19)
 
 
