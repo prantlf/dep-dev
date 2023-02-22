@@ -82,13 +82,13 @@ export async function upgradeDependencies(newDeps, { config, cwd, deep, save, li
   }, [])
 
   // collect all arguments for the npm execution
-  const args = ['up', '--no-save', '--no-package-lock', '--no-audit', '--no-update-notifier']
+  const args = ['up', '--no-save', '--no-audit', '--no-update-notifier']
   if (progress === undefined) progress = !('npm_config_progress' in process.env)
   if (!progress) args.push('--no-progress')
   if (verbose) args.push('--verbose')
   args.push(...deps);
 
-  // update the deps using `npm i --no-save --no-package-lock ...`
+  // update the deps using `npm i --no-save ...`
   if (verbose) console.log(`> npm ${args.join(' ')}`)
   if (list === undefined) list = process.env.npm_config_list !== ''
   if (dryRun === undefined) dryRun = process.env.npm_config_dry_run

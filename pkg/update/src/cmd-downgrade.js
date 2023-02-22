@@ -51,7 +51,7 @@ export async function downgradeDependencies(depNames, { config, cwd, save, lineB
   }, [])
 
   // collect all arguments for the npm execution
-  const args = ['i', '--no-save', '--no-package-lock', '--no-audit', '--no-update-notifier']
+  const args = ['i', '--no-save', '--no-audit', '--no-update-notifier']
   if (progress === undefined) progress = !('npm_config_progress' in process.env)
   if (!progress) args.push('--no-progress')
   if (verbose) args.push('--verbose')

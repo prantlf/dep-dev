@@ -17,7 +17,7 @@ export async function uninstallExtraDependencies(deps, { config, cwd, save, line
   if (verbose) log(`requested to uninstall: ${deps.join(', ')}`)
 
   // collect all arguments for the npm execution
-  const args = ['r', '--no-save', '--no-package-lock', '--no-audit', '--no-update-notifier']
+  const args = ['r', '--no-save', '--no-audit', '--no-update-notifier']
   if (progress === undefined) progress = !('npm_config_progress' in process.env)
   if (!progress) args.push('--no-progress')
   if (verbose) args.push('--verbose')

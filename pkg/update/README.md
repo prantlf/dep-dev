@@ -6,14 +6,14 @@
 
 Updates configured NPM packages without writing the new versions to package-lock.json.
 
-If you want to install a part of NPM dependencies using the package configuration and the package lock and another part without it, using `npm up --no-save --no-package-lock`, this package will help you to automate it.
+If you want to install a part of NPM dependencies using the package configuration and the package lock and another part without it, using `npm up --no-save`, this package will help you to automate it.
 
 If you link NPM packages together during the development and you're affected by the problem that `npm up` and `npm ln` delete one another packages that the other one added, have a look at [`@pkgdep/link`]. It plays well with `@pkgdep/update`.
 
-    # doesn't work                                    # works well
-    npm ci                                            npm ci
-    npm up --no-save --no-package-lock some-package   @pkgdep/update up some-package
-    npm ln other-package                              dep-link ln other-package
+    # doesn't work                  # works well
+    npm ci                          npm ci
+    npm up --no-save some-package   dep-update up some-package
+    npm ln other-package            dep-link ln other-package
 
 ## Synopsis
 
