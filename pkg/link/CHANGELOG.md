@@ -1,3 +1,10 @@
+# [@pkgdep/link-v1.2.3](https://github.com/prantlf/dep-dev/compare/@pkgdep/link-v1.2.2...@pkgdep/link-v1.2.3) (2023-10-30)
+
+
+### Bug Fixes
+
+* Upgrade dependencies ([19f0f17](https://github.com/prantlf/dep-dev/commit/19f0f1796cbeb8f1738b93ec429cee4b1bbde2e5))
+
 # [@pkgdep/link-v1.2.2](https://github.com/prantlf/dep-dev/compare/@pkgdep/link-v1.2.1...@pkgdep/link-v1.2.2) (2023-02-19)
 
 
