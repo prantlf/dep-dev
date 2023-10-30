@@ -1,3 +1,10 @@
+# [@pkgdep/extra-v1.3.2](https://github.com/prantlf/dep-dev/compare/@pkgdep/extra-v1.3.1...@pkgdep/extra-v1.3.2) (2023-10-30)
+
+
+### Bug Fixes
+
+* Upgrade dependencies ([19f0f17](https://github.com/prantlf/dep-dev/commit/19f0f1796cbeb8f1738b93ec429cee4b1bbde2e5))
+
 # [@pkgdep/extra-v1.3.1](https://github.com/prantlf/dep-dev/compare/@pkgdep/extra-v1.3.0...@pkgdep/extra-v1.3.1) (2023-02-22)
 
 
