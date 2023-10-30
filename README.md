@@ -49,7 +49,7 @@ And the resulting contents of `package.json`:
 ```json
 {
   "scripts": {
-    "prepare": "dep-extra i && dep-link ln"
+    "preprepare": "dep-extra i && dep-link ln"
   },
   "devDependencies": {
     "@pkgdep/extra": "^1.0.0",
@@ -98,7 +98,7 @@ And the resulting contents of `package.json`:
 ```json
 {
   "scripts": {
-    "prepare": "dep-update up && dep-link ln"
+    "preprepare": "dep-update up && dep-link ln"
   },
   "devDependencies": {
     "some-package": "^2.0.0",

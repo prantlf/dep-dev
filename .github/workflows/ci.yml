@@ -24,6 +24,8 @@ jobs:
         cache: 'pnpm'
     - name: Install Dependencies
       run: pnpm i --frozen-lockfile --no-verify-store-integrity
+    - name: Build
+      run: pnpm -r run build
     - name: Test
       run: pnpm -r test && pnpm test
     - name: Publish

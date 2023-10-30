@@ -27,7 +27,7 @@ The contents of `package.json`:
 {
   // prepare the project for linked dependencies
   "scripts": {
-    "prepare": "dep-link ln"
+    "preprepare": "dep-link ln"
   },
   "devDependencies": {
     "@pkgdep/link": "^1.0.0"
@@ -75,7 +75,7 @@ The contents of `package.json` will be extended with a preparation script and a 
 ```json
 {
   "scripts": {
-    "prepare": "dep-link ln"
+    "preprepare": "dep-link ln"
   },
   "devDependencies": {
     "@pkgdep/link": "^1.0.0"
@@ -111,7 +111,7 @@ And the resulting contents of `package.json`:
 ```json
 {
   "scripts": {
-    "prepare": "dep-extra i && dep-link ln"
+    "preprepare": "dep-extra i && dep-link ln"
   },
   "devDependencies": {
     "@pkgdep/link": "^1.0.0",

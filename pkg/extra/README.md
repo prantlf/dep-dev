@@ -27,7 +27,7 @@ The contents of `package.json`:
 {
   // prepare the project for extra dependencies
   "scripts": {
-    "prepare": "dep-extra i"
+    "preprepare": "dep-extra i"
   },
   "devDependencies": {
     "@pkgdep/extra": "^1.0.0"
@@ -68,7 +68,7 @@ The contents of `package.json` will be extended with a preparation script, a dev
 ```json
 {
   "scripts": {
-    "prepare": "dep-extra i"
+    "preprepare": "dep-extra i"
   },
   "devDependencies": {
     "@pkgdep/extra": "^1.0.0"

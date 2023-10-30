@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "prepare": "dep-extra i"
+    "preprepare": "dep-extra i"
   },
   "dependencies": {
     "build-number-generator": "2.0.4"

@@ -27,7 +27,7 @@ The contents of `package.json`:
 {
   // prepare the project for extra dependencies
   "scripts": {
-    "prepare": "@pkgdep/update up"
+    "preprepare": "@pkgdep/update up"
   },
   "devDependencies": {
     "some-package": "^2.0.0",
@@ -69,7 +69,7 @@ The contents of `package.json` will be extended with a preparation script, a dev
 ```json
 {
   "scripts": {
-    "prepare": "@pkgdep/update up"
+    "preprepare": "@pkgdep/update up"
   },
   "devDependencies": {
     "some-package": "^2.0.0",
