@@ -42,7 +42,7 @@
     "dist"
   ],
   "scripts": {
-    "prepare": "rollup -c && cp.js src/index.d.ts dist && cp.js ../../LICENSE .",
+    "prepare": "rollup -c && cp-j src/index.d.ts dist && cp-j ../../LICENSE .",
     "lint": "tsc --noEmit --lib ES2015 test/types.test.ts",
     "check": "node test/cjs.test.cjs && ./test/test.sh",
     "test": "tsc --noEmit --lib ES2015 test/types.test.ts && node test/cjs.test.cjs && ./test/test.sh"

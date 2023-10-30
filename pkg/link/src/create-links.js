@@ -55,7 +55,7 @@ async function createLink(name, root, target, type, verbose) {
   }
 }
 
-// Creates links to dpecified dependency directories and installs all bin
+// Creates links to specified dependency directories and installs all bin
 // scripts from those dependencies to node_modules/.bin.
 export default async function createLinks(deps, root, junctions, verbose) {
   const start = performance.now()

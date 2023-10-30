@@ -1,24 +1,21 @@
 diff --git a/lib/publish.js b/lib/publish.js
-index ff3af00789942572806e52627b5e22c8ac25d1b1..8b1af5508a9b51874be1855cdde3fc551e93846f 100644
+index ac3e6feea8e388d88e77d58538a265f7ab4eac05..1feb6e3abe3e16f9a4fb3933128151c065782815 100644
 --- a/lib/publish.js
 +++ b/lib/publish.js
-@@ -4,7 +4,7 @@ const getRegistry = require('./get-registry');
- const getChannel = require('./get-channel');
- const getReleaseInfo = require('./get-release-info');
- 
--module.exports = async (npmrc, {npmPublish, pkgRoot}, pkg, context) => {
-+module.exports = async (npmrc, {npmPublish, pkgRoot, pkgManager}, pkg, context) => {
-   const {
-     cwd,
-     env,
-@@ -18,16 +18,30 @@ module.exports = async (npmrc, {npmPublish, pkgRoot}, pkg, context) => {
+@@ -18,16 +18,30 @@ export default async function (npmrc, { npmPublish, pkgRoot }, pkg, context) {
      const basePath = pkgRoot ? path.resolve(cwd, pkgRoot) : cwd;
      const registry = getRegistry(pkg, context);
      const distTag = getChannel(channel);
 +    let command;
 +    let args = ['publish', basePath, '--tag', distTag, '--registry', registry];
 +    let userconfigOld;
-+
+ 
+-    logger.log(`Publishing version ${version} to npm registry on dist-tag ${distTag}`);
+-    const result = execa(
+-      "npm",
+-      ["publish", basePath, "--userconfig", npmrc, "--tag", distTag, "--registry", registry],
+-      { cwd, env, preferLocal: true }
+-    );
 +    if (pkgManager === 'pnpm') {
 +      command = 'pnpm';
 +      userconfigOld = process.env.npm_config_userconfig;
@@ -27,16 +24,11 @@ index ff3af00789942572806e52627b5e22c8ac25d1b1..8b1af5508a9b51874be1855cdde3fc55
 +      command = 'npm';
 +      args.push('--userconfig', npmrc);
 +    }
- 
-     logger.log(`Publishing version ${version} to npm registry on dist-tag ${distTag}`);
--    const result = execa(
--      'npm',
--      ['publish', basePath, '--userconfig', npmrc, '--tag', distTag, '--registry', registry],
--      {cwd, env, preferLocal: true}
--    );
++
++    logger.log(`Publishing version ${version} using ${command} to npm registry on dist-tag ${distTag}`);
 +    const result = execa(command, args, {cwd, env, preferLocal: true});
-     result.stdout.pipe(stdout, {end: false});
-     result.stderr.pipe(stderr, {end: false});
+     result.stdout.pipe(stdout, { end: false });
+     result.stderr.pipe(stderr, { end: false });
 -    await result;
 +    try {
 +      await result;
